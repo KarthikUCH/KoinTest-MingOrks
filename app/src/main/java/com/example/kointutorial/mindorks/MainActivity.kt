@@ -21,11 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.kointutorial.mindorks.ui.theme.KoinTutorialMindOrksTheme
 import com.kvr.navigation.payment.PaymentActivity
+import com.kvr.navigation.payment.PaymentRepository
+import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.qualifier.named
 
 class MainActivity : ComponentActivity() {
 
+    val paymentQualifiedScope = getKoin().getOrCreateScope("PaymentScopeId", named("PaymentScope"))
+
     private val mainViewModel: MainViewModel by viewModel()
+
+    private val paymentRepository: PaymentRepository by paymentQualifiedScope.inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +47,18 @@ class MainActivity : ComponentActivity() {
                     DisplayUser(mainViewModel = mainViewModel) {
                         val intent = Intent(this, PaymentActivity::class.java)
                         startActivity(intent)
+                        paymentQualifiedScope.close()
                     }
                 }
             }
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        paymentRepository.payments = listOf("Main NETS", "Main VISA", "Main CASH")
+        println(paymentRepository.getPaymentList())
     }
 }
 
