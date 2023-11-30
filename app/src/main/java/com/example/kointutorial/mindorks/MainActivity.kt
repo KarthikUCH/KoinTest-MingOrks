@@ -1,5 +1,6 @@
 package com.example.kointutorial.mindorks
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.kointutorial.mindorks.ui.theme.KoinTutorialMindOrksTheme
+import com.kvr.navigation.payment.PaymentActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +38,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //Greeting("Android")
                     DisplayUser(mainViewModel = mainViewModel) {
+                        val intent = Intent(this, PaymentActivity::class.java)
+                        startActivity(intent)
                     }
                 }
             }
